@@ -84,3 +84,16 @@ Now that we've got those out of the way, let's finish up the chunks portion with
 Well, probably the most noticeable method that pops up when you look at ***`ChunkGeneration.java`***, *`renderChunks`*. It can look overwhelming, but most of it is mainly for the Zoom in/out feature. In truth, the method is quite simple. It goes into a nested for loop, noting the player's chunk coordinates as the center. While it looks through the neighboring chunks to the player based on *`Render Distance`*, it calls *`getNoiseMap`* to see whether those chunks already exist or not in the cache. Then it simply draws the chunks for the player. 
 
 Phew, that was a lot, but we got through the chunk-based aspect of the code. Next up, we'll be exploring the generation of Perlin Noise itself, FMBs, and everything else that goes on.
+
+## *Perlin Noise*
+
+In this section, we will go over how the Perlin noise is generated!
+
+(All these methods can be seen in ***`GeneratePerlin.java`***)
+
+To start off let's explore the buffer methods that do all the background functions. Those are: *`lerp`*, *`smoothstep`*, *`clamp`*, and *`hashRandom`*.  
+Let's start with *`clamp`*. Clamp is a very simple method that ensures that the decimal points are within the preset ranges, with its lowerlimit and upperlimit variables, escentially clamping all the values into boundaries.
+
+Next up would be *`smoothstep`*. Smoothstep, as written in the name, smooths everything out. Consider a line of decimal numbers: *0.2, 0.5, 0.1, 0.7, 0.1, 0.4, ...* If we imagine these as points on a graph and connect them with lines, we get rough, jagged and sharp slopes. Smoothstep ensures that every point is within an apporpriate distance from the previous in order to make the difference seem like a smooth slope. Following a simple math equation: p<sup>2</sup> (3.0 - 2.0p), after the point goes through "*`clamp`* check".
+
+*`lerp`*, or more formally linear interpolation, follows a math formula: y = y<sub>1</sub> + ({y<sub>2</sub> - y<sub>1</sub>} / {x<sub>2</sub> - x<sub>1</sub>})(x - x<sub>1</sub>), in the code it is simplified down to: a + t(b-a), with a and b being the corners and t being the slope.
